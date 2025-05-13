@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:59:29 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 02:36:36 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:09:12 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	ft_printf(const char *format, ...)
 	int		char_counter;
 
 	char_counter = 0;
-	if (!*format || !format)
+	if (!format || !*format)
 		return (0);
 	va_start(args_list, format);
 	char_counter = ft_print_counter(format, args_list);

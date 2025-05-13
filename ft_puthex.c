@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:55:50 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 03:00:05 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:35:46 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ static int	ft_flag_check(char *hex, t_flags *flags, char c)
 			tmp += 1;
 		}
 	}
-	if (flags->bitflag & ZERO && flags->precision < 0)
-		return (0);
-	else
-		return (ft_precision_print(hex, flags, c));
+	return (ft_precision_print(hex, flags, c));
 }
 
 static int	ft_width_print(char *hex, t_flags *flags, char c)
@@ -56,8 +53,8 @@ static int	ft_width_print(char *hex, t_flags *flags, char c)
 
 	char_counter = 0;
 	if (flags->bitflag & ZERO && flags->precision < 0)
-		ft_flag_check(hex, flags, c);
-	if (flags->bitflag & HASH && *hex)
+		char_counter += ft_flag_check(hex, flags, c);
+	if (flags->bitflag & HASH && *hex != '0')
 		len = ft_strlen(hex) + 2;
 	else
 		len = ft_strlen(hex);
