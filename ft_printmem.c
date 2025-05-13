@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_puthex.c                                        :+:      :+:    :+:   */
+/*   ft_printmem.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:55:50 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 03:00:05 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 01:16:15 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	ft_precision_print(char *hex, t_flags *flags, char c)
+static int	ft_precision_print(char *hex, t_flags *flags)
 {
 	int		char_counter;
 
 	char_counter = 0;
-	if (flags->bitflag & HASH && c == 'x' && ft_strlen(hex) && *hex != '0')
-		char_counter += write(1, "0x", 2);
-	if (flags->bitflag & HASH && c == 'X' && ft_strlen(hex) && *hex != '0')
-		char_counter += write(1, "0X", 2);
+	char_counter += write(1, "0x", 2);
 	while (flags->precision > ft_strlen(hex))
 	{
 		char_counter += write(1, "0", 1);
@@ -29,38 +26,15 @@ static int	ft_precision_print(char *hex, t_flags *flags, char c)
 	return (char_counter);
 }
 
-static int	ft_flag_check(char *hex, t_flags *flags, char c)
-{
-	char	*tmp;
-
-	if (c == 'X')
-	{
-		tmp = hex;
-		while (*tmp)
-		{
-			if (*tmp >= 'a' && *tmp <= 'f')
-				*tmp -= 32;
-			tmp += 1;
-		}
-	}
-	if (flags->bitflag & ZERO && flags->precision < 0)
-		return (0);
-	else
-		return (ft_precision_print(hex, flags, c));
-}
-
-static int	ft_width_print(char *hex, t_flags *flags, char c)
+static int	ft_width_print(char *hex, t_flags *flags)
 {
 	int		char_counter;
 	int		len;
 
 	char_counter = 0;
 	if (flags->bitflag & ZERO && flags->precision < 0)
-		ft_flag_check(hex, flags, c);
-	if (flags->bitflag & HASH && *hex)
-		len = ft_strlen(hex) + 2;
-	else
-		len = ft_strlen(hex);
+		char_counter += write(1, "0x", 2);
+	len = ft_strlen(hex) + 2;
 	while (flags->width > len)
 	{
 		if (flags->bitflag & ZERO && !(flags->bitflag & DASH)
@@ -73,7 +47,7 @@ static int	ft_width_print(char *hex, t_flags *flags, char c)
 	return (char_counter);
 }
 
-static int	ft_tohex(unsigned int nbr, t_flags *flags, char *hex)
+static int	ft_tohex(unsigned long int nbr, t_flags *flags, char *hex)
 {
 	int		i;
 
@@ -91,7 +65,7 @@ static int	ft_tohex(unsigned int nbr, t_flags *flags, char *hex)
 	return (i);
 }
 
-int	ft_puthex(unsigned int nbr, t_flags *flags, const char conversion)
+int	ft_printmem(unsigned long int nbr, t_flags *flags)
 {
 	int		count[2];
 	char	hex[21];
@@ -102,19 +76,19 @@ int	ft_puthex(unsigned int nbr, t_flags *flags, const char conversion)
 		flags->width -= flags->precision - ft_strlen(&hex[count[1]]);
 	if (flags->bitflag & DASH)
 	{
-		count[0] += ft_flag_check(&hex[count[1]], flags, conversion);
+		count[0] += ft_precision_print(&hex[count[1]], flags);
 		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
+		count[0] += ft_width_print(&hex[count[1]], flags);
 	}
 	else if (flags->bitflag & ZERO && flags->precision < 0)
 	{
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
+		count[0] += ft_width_print(&hex[count[1]], flags);
 		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
 	}
 	else
 	{
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
-		count[0] += ft_flag_check(&hex[count[1]], flags, conversion);
+		count[0] += ft_width_print(&hex[count[1]], flags);
+		count[0] += ft_precision_print(&hex[count[1]], flags);
 		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
 	}
 	return (count[0]);

@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:59:29 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/12 02:08:17 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 02:36:36 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	ft_conversion(const char *format, va_list args_list, t_flags *flags)
 	if (*format == 'c')
 		char_counter += ft_putchar(va_arg(args_list, int), flags);
 	else if (*format == 's')
-		char_counter += ft_putstr(va_arg(args_list, const char *), flags);
+		char_counter += ft_putstr(va_arg(args_list, char *), flags);
 	else if (*format == 'd' || *format == 'i')
 		char_counter += ft_putnbr(va_arg(args_list, int), flags);
 	else if (*format == 'u')
@@ -68,11 +68,9 @@ static int	ft_conversion(const char *format, va_list args_list, t_flags *flags)
 		char_counter += ft_puthex(va_arg(args_list, unsigned int), flags,
 				*format);
 	else if (*format == 'p')
-		char_counter += ft_putmem(va_arg(args_list, void *), flags);
-	else if (*format == '%')
-		char_counter += write(1, "%", 1);
+		char_counter += ft_putmem(va_arg(args_list, uintptr_t), flags);
 	else
-		char_counter = -1;
+		char_counter += write(1, "%", 1);
 	return (char_counter);
 }
 

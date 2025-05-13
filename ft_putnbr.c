@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:55:50 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/11 20:05:36 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 02:54:10 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ static int	ft_width_print(int nbr, t_flags *flags)
 	int		len;
 
 	char_counter = 0;
-	len = ft_nbrlen(nbr);
+	if (nbr == 0 && flags->precision == 0)
+		len = 0;
+	else
+		len = ft_nbrlen(nbr);
 	if (nbr < 0 || flags->bitflag & SPACE || flags->bitflag & PLUS)
 		len++;
 	while (flags->width > len)

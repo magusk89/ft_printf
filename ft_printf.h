@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:57:17 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/11 23:16:48 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 02:40:34 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define PLUS 16
 # include <stdarg.h>
 # include <unistd.h>
+# include <stdint.h>
 
 typedef struct s_flags
 {
@@ -32,10 +33,11 @@ int	ft_strlen(const char *s);
 int	ft_nbrlen(int nbr);
 int	ft_atoi(const char *nptr);
 int	ft_putchar(int c, t_flags *flags);
-int	ft_putstr(const char *s, t_flags *flags);
+int	ft_putstr(char *s, t_flags *flags);
 int	ft_putnbr(int nbr, t_flags *flags);
 int	ft_putunbr(unsigned int nbr, t_flags *flags);
 int	ft_puthex(unsigned int hex, t_flags *flags, char conversion);
-int	ft_putmem(void *p, t_flags *flags);
+int	ft_printmem(unsigned long int nbr, t_flags *flags);
+int	ft_putmem(uintptr_t nbr, t_flags *flags);
 
 #endif
