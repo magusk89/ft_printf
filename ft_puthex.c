@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:55:50 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 18:35:46 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:03:16 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ static int	ft_precision_print(char *hex, t_flags *flags, char c)
 
 	char_counter = 0;
 	if (flags->bitflag & HASH && c == 'x' && ft_strlen(hex) && *hex != '0')
-		char_counter += write(1, "0x", 2);
+		char_counter += ft_write_guard("0x", 2, flags);
 	if (flags->bitflag & HASH && c == 'X' && ft_strlen(hex) && *hex != '0')
-		char_counter += write(1, "0X", 2);
+		char_counter += ft_write_guard("0X", 2, flags);
 	while (flags->precision > ft_strlen(hex))
 	{
-		char_counter += write(1, "0", 1);
+		char_counter += ft_write_guard("0", 1, flags);
 		flags->precision--;
 	}
 	return (char_counter);
@@ -62,9 +62,9 @@ static int	ft_width_print(char *hex, t_flags *flags, char c)
 	{
 		if (flags->bitflag & ZERO && !(flags->bitflag & DASH)
 			&& flags->precision < 0)
-			char_counter += write(1, "0", 1);
+			char_counter += ft_write_guard("0", 1, flags);
 		else
-			char_counter += write(1, " ", 1);
+			char_counter += ft_write_guard(" ", 1, flags);
 		flags->width--;
 	}
 	return (char_counter);
@@ -90,29 +90,29 @@ static int	ft_tohex(unsigned int nbr, t_flags *flags, char *hex)
 
 int	ft_puthex(unsigned int nbr, t_flags *flags, const char conversion)
 {
-	int		count[2];
+	int		ctr[2];
 	char	hex[21];
 
-	count[0] = 0;
-	count[1] = ft_tohex(nbr, flags, hex);
-	if (flags->precision > ft_strlen(&hex[count[1]]))
-		flags->width -= flags->precision - ft_strlen(&hex[count[1]]);
+	ctr[0] = 0;
+	ctr[1] = ft_tohex(nbr, flags, hex);
+	if (flags->precision > ft_strlen(&hex[ctr[1]]))
+		flags->width -= flags->precision - ft_strlen(&hex[ctr[1]]);
 	if (flags->bitflag & DASH)
 	{
-		count[0] += ft_flag_check(&hex[count[1]], flags, conversion);
-		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
+		ctr[0] += ft_flag_check(&hex[ctr[1]], flags, conversion);
+		ctr[0] += ft_write_guard(&hex[ctr[1]], ft_strlen(&hex[ctr[1]]), flags);
+		ctr[0] += ft_width_print(&hex[ctr[1]], flags, conversion);
 	}
 	else if (flags->bitflag & ZERO && flags->precision < 0)
 	{
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
-		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
+		ctr[0] += ft_width_print(&hex[ctr[1]], flags, conversion);
+		ctr[0] += ft_write_guard(&hex[ctr[1]], ft_strlen(&hex[ctr[1]]), flags);
 	}
 	else
 	{
-		count[0] += ft_width_print(&hex[count[1]], flags, conversion);
-		count[0] += ft_flag_check(&hex[count[1]], flags, conversion);
-		count[0] += write(1, &hex[count[1]], ft_strlen(&hex[count[1]]));
+		ctr[0] += ft_width_print(&hex[ctr[1]], flags, conversion);
+		ctr[0] += ft_flag_check(&hex[ctr[1]], flags, conversion);
+		ctr[0] += ft_write_guard(&hex[ctr[1]], ft_strlen(&hex[ctr[1]]), flags);
 	}
-	return (count[0]);
+	return (ctr[0]);
 }

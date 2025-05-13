@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:55:50 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 03:02:22 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:59:42 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	ft_precision_print(unsigned int nbr, t_flags *flags)
 	char_counter = 0;
 	while (flags->precision > ft_unbrlen(nbr))
 	{
-		char_counter += write(1, "0", 1);
+		char_counter += ft_write_guard("0", 1, flags);
 		flags->precision--;
 	}
 	return (char_counter);
@@ -52,9 +52,9 @@ static int	ft_width_print(unsigned int nbr, t_flags *flags)
 	{
 		if (flags->bitflag & ZERO && !(flags->bitflag & DASH)
 			&& flags->precision < 0)
-			char_counter += write(1, "0", 1);
+			char_counter += ft_write_guard("0", 1, flags);
 		else
-			char_counter += write(1, " ", 1);
+			char_counter += ft_write_guard(" ", 1, flags);
 		flags->width--;
 	}
 	return (char_counter);
@@ -73,13 +73,13 @@ static int	ft_printnbr(unsigned int nbr, int empty_flag, t_flags *flags)
 	if (nbr <= 9)
 	{
 		buffer = nbr + '0';
-		char_counter[0] += write(1, &buffer, 1);
+		char_counter[0] += ft_write_guard(&buffer, 1, flags);
 	}
 	else
 	{
 		char_counter[0] += ft_printnbr(nbr / 10, char_counter[1], flags);
 		buffer = (nbr % 10) + '0';
-		char_counter[0] += write(1, &buffer, 1);
+		char_counter[0] += ft_write_guard(&buffer, 1, flags);
 	}
 	return (char_counter[0]);
 }

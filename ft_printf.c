@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:59:29 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 18:09:12 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:09:59 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	ft_conversion(const char *format, va_list args_list, t_flags *flags)
 	else if (*format == 'p')
 		char_counter += ft_putmem(va_arg(args_list, uintptr_t), flags);
 	else
-		char_counter += write(1, "%", 1);
+		char_counter += ft_write_guard("%", 1, flags);
 	return (char_counter);
 }
 
@@ -78,22 +78,21 @@ static int	ft_print_counter(const char *format, va_list args_list)
 {
 	t_flags	flags;
 	int		char_counter;
-	int		tmp;
 
 	char_counter = 0;
+	flags.guard = 0;
 	while (*format)
 	{
 		if (*format == '%')
 		{
 			format += 1;
 			format = ft_flag_check(format, &flags);
-			tmp = ft_conversion(format, args_list, &flags);
+			char_counter += ft_conversion(format, args_list, &flags);
 		}
 		else
-			tmp = write(1, format, 1);
-		if (tmp < 0)
+			char_counter += ft_write_guard(format, 1, &flags);
+		if (flags.guard < 0)
 			return (-1);
-		char_counter += tmp;
 		format += 1;
 	}
 	return (char_counter);

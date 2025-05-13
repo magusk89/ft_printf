@@ -6,7 +6,7 @@
 /*   By: alebarbo <alebarbo@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:57:17 by alebarbo          #+#    #+#             */
-/*   Updated: 2025/05/13 02:40:34 by alebarbo         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:43:23 by alebarbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ typedef struct s_flags
 	char	bitflag;
 	int		width;
 	int		precision;
+	int		guard;
 }			t_flags;
 
 int	ft_printf(const char *format, ...);
+int	ft_write_guard(const char *format, int len, t_flags *flags);
 int	ft_strlen(const char *s);
 int	ft_nbrlen(int nbr);
 int	ft_atoi(const char *nptr);
